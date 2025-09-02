@@ -1,7 +1,7 @@
 // Utility for handling JWT token generation and verification (frontend only, static secret)
 import jwt from 'jwt-simple';
 
-const SECRET = 'STATIC_SECRET_KEY_CHANGE_ME';
+const SECRET = '3c88910e0cc4991951191e7ecf2edff2';
 
 export function generateToken(payload: object, expiresInSeconds: number = 600) {
   const exp = Math.floor(Date.now() / 1000) + expiresInSeconds;

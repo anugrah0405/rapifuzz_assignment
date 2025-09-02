@@ -1,0 +1,15 @@
+.button:hover {
+    background-color: #155dfc;
+}
+
+.row:hover {
+    background-color: #dbeafe;
+}
+
+.logout:hover {
+    background-color: #e7000b;
+}
+
+.paginationButton:hover {
+    background-color: oklch(88.2% 0.059 254.128);
+}

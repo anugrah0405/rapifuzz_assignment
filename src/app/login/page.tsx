@@ -1,5 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import LoginForm from '@/components/LoginForm';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { generateToken } from '@/utils/jwt';
@@ -16,8 +18,12 @@ export default function LoginPage() {
   const [message, setMessage] = useState<string | undefined>();
 
   useEffect(() => {
-    if (params.get('registered')) setMessage('Registration successful! Please login.');
-    if (params.get('loggedout')) setMessage("You've been logged out");
+    if (params.get('registered')) {
+      toast.success('Registration successful! Please login.', { position: 'top-center' });
+    }
+    if (params.get('loggedout')) {
+      toast.info("You've been logged out", { position: 'top-center' });
+    }
   }, [params]);
 
   const handleLogin = (username: string, password: string) => {
@@ -33,13 +39,13 @@ export default function LoginPage() {
   };
 
   return (
-    <>
-      {message && <div className="text-green-600 text-center mt-4">{message}</div>}
+    <div className="min-h-screen flex flex-col justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+      <ToastContainer />
       <LoginForm onLogin={handleLogin} error={error} />
-      <div className="text-center mt-4">
-        <span>Don't have an account? </span>
-        <a href="/register" className="text-blue-600 hover:underline">Register</a>
+      <div className="text-center mt-6">
+        <span className="text-gray-700">Don't have an account? </span>
+        <a href="/register" className="text-blue-600 hover:underline font-semibold">Register</a>
       </div>
-    </>
+    </div>
   );
 }
