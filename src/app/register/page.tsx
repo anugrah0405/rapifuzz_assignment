@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import RegisterForm from '@/components/RegisterForm';
 import { useRouter } from 'next/navigation';
 
-// For demo: store users in localStorage
+// Storing users in localStorage (not recommended for production)
 function saveUser(username: string, password: string) {
   const users = JSON.parse(localStorage.getItem('users') || '{}');
   if (users[username]) return false;

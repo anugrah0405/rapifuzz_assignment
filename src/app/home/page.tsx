@@ -35,10 +35,11 @@ export default function HomePage() {
     setLoading(true);
     setError('');
     // Build API URL with pagination and search
-    let url = `https://jsonplaceholder.typicode.com/photos?_limit=${ITEMS_PER_PAGE}&_page=${page}`;
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '';
+    let url = `${baseUrl}/photos?_limit=${ITEMS_PER_PAGE}&_page=${page}`;
     if (search.trim()) {
       // JSONPlaceholder does not support search, so we fetch all and filter client-side for demo
-      url = `https://jsonplaceholder.typicode.com/photos?title_like=${encodeURIComponent(search)}&_limit=${ITEMS_PER_PAGE}&_page=${page}`;
+      url = `${baseUrl}/photos?title_like=${encodeURIComponent(search)}&_limit=${ITEMS_PER_PAGE}&_page=${page}`;
     }
     axios
       .get(url, { validateStatus: () => true })
@@ -76,7 +77,6 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-10">
       <div className="w-full max-w-2xl p-8 bg-white rounded-2xl shadow-lg border border-gray-100 relative">
-        {/* Logout button at top right */}
         <form
           onSubmit={e => {
             e.preventDefault();
@@ -111,20 +111,39 @@ export default function HomePage() {
           }} />
         )}
 
-        {/* Modal for image details */}
+        {/* Image Detail Modal */}
         <Modal open={!!selectedImage} onClose={() => setSelectedImage(null)}>
           {selectedImage && (
             <div className="flex flex-col gap-4 items-center">
-              <img src={selectedImage.url} alt={selectedImage.title} className="rounded-lg shadow-md w-48 h-48 object-cover" />
-              <a href={selectedImage.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">View Full Image</a>
+              <img
+                src={selectedImage.url}
+                alt={selectedImage.title}
+                className="rounded-lg shadow-md w-48 h-48 object-cover"
+                onError={e => {
+                  const target = e.currentTarget;
+                  if (!target.src.endsWith('/No-Image-Placeholder.svg')) {
+                    target.src = '/No-Image-Placeholder.svg';
+                  }
+                }}
+              />
               <div className="text-lg font-semibold text-blue-700">{selectedImage.title}</div>
               <div className="text-gray-500 text-sm">Album ID: {selectedImage.albumId}</div>
-              <img src={selectedImage.thumbnailUrl} alt="Thumbnail" className="rounded shadow-md w-16 h-16 object-cover mt-2" />
+              <img
+                src={selectedImage.thumbnailUrl}
+                alt="Thumbnail"
+                className="rounded shadow-md w-16 h-16 object-cover mt-2"
+                onError={e => {
+                  const target = e.currentTarget;
+                  if (!target.src.endsWith('/No-Image-Placeholder.svg')) {
+                    target.src = '/No-Image-Placeholder.svg';
+                  }
+                }}
+              />
             </div>
           )}
         </Modal>
 
-        {/* Pagination Controls */}
+        {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex justify-center items-center gap-2 mt-6 flex-wrap">
             <button
@@ -135,10 +154,10 @@ export default function HomePage() {
             >
               <ChevronLeft size={20} />
             </button>
-            {/* Smart pagination logic */}
+            
             {(() => {
               const btns = [];
-              const maxButtons = 7; // Adjust for more/less neighbors
+              const maxButtons = 7; 
               const neighbors = 2;
               let start = Math.max(2, page - neighbors);
               let end = Math.min(totalPages - 1, page + neighbors);

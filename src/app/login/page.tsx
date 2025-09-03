@@ -15,7 +15,6 @@ export default function LoginPage() {
   const [error, setError] = useState<string | undefined>();
   const router = useRouter();
   const params = useSearchParams();
-  const [message, setMessage] = useState<string | undefined>();
 
   useEffect(() => {
     if (params.get('registered')) {

@@ -1,9 +1,8 @@
 import { useEffect, useRef } from 'react';
-
-/**
- * Calls onIdle after `timeout` ms of no user activity (mouse, keyboard, touch).
- * Returns a reset function to manually reset the timer.
- */
+/*
+Calls onIdle after `timeout` ms of no user activity (mouse, keyboard, touch).
+Returns a reset function to manually reset the timer.
+*/
 export function useIdle(timeout: number, onIdle: () => void) {
   const timer = useRef<NodeJS.Timeout | null>(null);
 
